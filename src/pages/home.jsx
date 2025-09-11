@@ -1,6 +1,4 @@
 import React, { useState, useEffect, useMemo } from 'react';
-// এই লাইনটি আপনার getWeatherInfo ফাংশশনের সঠিক পাথ অনুযায়ী পরিবর্তন করুন
-import { getWeatherInfo } from '../assets/icons';
 
 // --- আইকন কম্পোনেন্টগুলো ---
 const UvIcon = () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-6 h-6 inline-block"><path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M12 12a5 5 0 100-10 5 5 0 000 10z"></path></svg>;
@@ -8,12 +6,34 @@ const WindIcon = () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor
 const SunIcon = ({ isSunrise }) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-6 h-6 inline-block"><path d={isSunrise ? "M17 18a5 5 0 00-10 0" : "M17 16a5 5 0 00-10 0"}></path><line x1="12" y1="9" x2="12" y2="2"></line><line x1="4.22" y1="10.22" x2="5.64" y2="8.81"></line><line x1="1" y1="18" x2="3" y2="18"></line><line x1="21" y1="18" x2="23" y2="18"></line><line x1="18.36" y1="8.81" x2="19.78" y2="10.22"></line><line x1="12" y1="22" x2="12" y2="18"></line></svg>;
 const HumidityIcon = () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-6 h-6 inline-block"><path d="M12 2.69l5.66 5.66a8 8 0 11-11.31 0L12 2.69z"></path></svg>;
 const FeelsLikeIcon = () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-6 h-6 inline-block"><path d="M14 9V5a3 3 0 00-6 0v4M17.5 11a2.5 2.5 0 110 5H10a2 2 0 110-4h2.5a2.5 2.5 0 110 5H9"></path></svg>;
-const PressureIcon = () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-6 h-6 inline-block"><path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path><path d="M12 12L8 8"></path><path d="M13 17l-5-5"></path></svg>;
-const WindDirectionIcon = () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-6 h-6 inline-block"><path d="M12 2L2 22h20L12 2z"></path><path d="M12 15v-7"></path></svg>;
-const AirQualityIcon = () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-6 h-6 inline-block"><path d="M12.5 18H5.22a2 2 0 01-1.79-1.11L2 12l1.43-4.89a2 2 0 011.79-1.11h13.14a2 2 0 011.79 1.11L22 12l-1.43 4.89a2 2 0 01-1.79 1.11H17M12.5 18a2.5 2.5 0 110-5 2.5 2.5 0 010 5zM17 18a2.5 2.5 0 100-5 2.5 2.5 0 000 5z"></path></svg>;
+const PressureIcon = () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-6 h-6 inline-block" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"></path><path d="m12 12-4-4"></path><path d="m13 17-5-5"></path></svg>;
+const WindDirectionIcon = () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-6 h-6 inline-block" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2 2 22h20L12 2z"></path><path d="M12 15V5"></path></svg>;
+const AirQualityIcon = () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-6 h-6 inline-block" strokeLinecap="round" strokeLinejoin="round"><path d="M12.5 18H5.22a2 2 0 0 1-1.79-1.11L2 12l1.43-4.89a2 2 0 0 1 1.79-1.11h13.14a2 2 0 0 1 1.79 1.11L22 12l-1.43 4.89a2 2 0 0 1-1.79 1.11H17"></path><path d="M12.5 18a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z"></path><path d="M17 18a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z"></path></svg>;
+const DaylightIcon = () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-6 h-6 inline-block" strokeLinecap="round" strokeLinejoin="round"><path d="M12 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10z"></path><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path></svg>;
 
+// --- Helper Components ---
 const Loader = () => ( <div className="text-center my-8"><svg className="animate-spin h-10 w-10 text-white mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg><p className="mt-2 text-slate-300">Loading data...</p></div> );
 const ErrorMessage = ({ message }) => ( <div className="text-center text-yellow-300 glass-card p-4 rounded-lg mt-4 max-w-xl mx-auto"><p>Error: {message}</p></div> );
+
+// --- ত্রুটি সমাধানের জন্য getWeatherInfo ফাংশনটি এখানে যোগ করা হয়েছে ---
+const getWeatherInfo = (code) => {
+    const weatherMap = {
+        0: { d: "Clear sky", i: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-full h-full text-yellow-300"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>` },
+        1: { d: "Mainly clear", i: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-full h-full text-white"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"></path><path d="M22 10a3 3 0 0 0-3-3h-2.207a5.502 5.502 0 0 0-10.702.5"></path></svg>` },
+        2: { d: "Partly cloudy", i: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-full h-full text-white"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"></path></svg>` },
+        3: { d: "Overcast", i: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-full h-full text-gray-400"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"></path></svg>` },
+        45: { d: "Fog", i: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-full h-full text-gray-400"><path d="M16 16.5A4.2 4.2 0 0 0 12 12a4.2 4.2 0 0 0-4 4.5"></path><path d="M2 12h2.25"></path><path d="M19.75 12H22"></path><path d="M4 16h16"></path><path d="M4 20h16"></path><path d="M12 8V4.5"></path></svg>` },
+        51: { d: "Light drizzle", i: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-full h-full text-blue-300"><path d="M8 19v2"></path><path d="M8 13v2"></path><path d="M16 19v2"></path><path d="M16 13v2"></path><path d="M12 21v2"></path><path d="M12 15v2"></path><path d="M20 16.5A4.5 4.5 0 0 0 15.5 12H9a7 7 0 0 0-7 7"></path></svg>` },
+        61: { d: "Light rain", i: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-full h-full text-blue-400"><path d="M8 19v2"></path><path d="M8 13v2"></path><path d="M16 19v2"></path><path d="M16 13v2"></path><path d="M12 21v2"></path><path d="M12 15v2"></path><path d="M20 16.5A4.5 4.5 0 0 0 15.5 12H9a7 7 0 0 0-7 7"></path></svg>` },
+        80: { d: "Rain showers", i: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-full h-full text-blue-500"><path d="M20 16.5A4.5 4.5 0 0 0 15.5 12H9a7 7 0 0 0-7 7"></path><path d="m9 12-2-7h10l-2 7"></path><path d="m12 22 2-7"></path><path d="m8 22 2-7"></path><path d="m16 22 2-7"></path></svg>` },
+        95: { d: "Thunderstorm", i: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-full h-full text-yellow-500"><path d="M21.74 18.25a2.12 2.12 0 0 0-2.92 0c-1.88 2.3-5.28 3.75-9.82 3.75-5.28 0-10-2.5-10-2.5.83 2.17 4.25 3.75 9 3.75 6.5 0 10-2.5 12-5 1.4-1.68 1.4-3.5 0-5Z"></path><path d="M16 12.5a4.2 4.2 0 0 0-4-4.5 4.2 4.2 0 0 0-4 4.5c0 2.21 1.79 4 4 4s4-1.79 4-4Z"></path><path d="m14.5 12.5-3 5.5"></path><path d="m9.5 12.5 3 5.5"></path><path d="m13 10-1.5-5.5"></path><path d="m8 10 1.5-5.5"></path></svg>` },
+    };
+    const defaultWeather = { d: "Cloudy", i: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-full h-full text-white"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"></path></svg>` };
+    
+    // ম্যাপ থেকে সঠিক আবহাওয়ার তথ্য খুঁজে বের করা হচ্ছে
+    const key = Object.keys(weatherMap).find(k => Number(k) >= code);
+    return weatherMap[key] || defaultWeather;
+};
 
 // --- নতুন Helper ফাংশন ---
 const getAqiInfo = (aqi) => {
@@ -30,10 +50,60 @@ const getWindDirection = (degrees) => {
     return directions[Math.round(degrees / 22.5) % 16];
 };
 
+// --- নতুন SunPath কম্পোনেন্ট ---
+const SunPathComponent = ({ sunrise, sunset }) => {
+    const [now, setNow] = useState(new Date());
+
+    useEffect(() => {
+        const timer = setInterval(() => setNow(new Date()), 60000); // প্রতি মিনিটে আপডেট
+        return () => clearInterval(timer);
+    }, []);
+
+    const { sunPosition, daylightPercentage } = useMemo(() => {
+        const sunriseTime = new Date(sunrise).getTime();
+        const sunsetTime = new Date(sunset).getTime();
+        const nowTime = now.getTime();
+
+        if (nowTime < sunriseTime || nowTime > sunsetTime) {
+            return { sunPosition: nowTime < sunriseTime ? 0 : 100, daylightPercentage: 0 };
+        }
+
+        const totalDaylight = sunsetTime - sunriseTime;
+        const elapsed = nowTime - sunriseTime;
+        const percentage = (elapsed / totalDaylight) * 100;
+        
+        return { sunPosition: percentage, daylightPercentage: percentage };
+    }, [sunrise, sunset, now]);
+    
+    const angle = (sunPosition / 100) * 180;
+    const x = 50 - 45 * Math.cos(angle * (Math.PI / 180));
+    const y = 90 - 45 * Math.sin(angle * (Math.PI / 180));
+
+    return (
+        <div className="relative w-full max-w-lg mx-auto h-40">
+            <svg viewBox="0 0 100 100" className="w-full h-auto overflow-visible">
+                <path d="M 5 90 A 45 45 0 0 1 95 90" stroke="rgba(255, 255, 255, 0.3)" strokeWidth="2" fill="none" strokeDasharray="4, 4" />
+                <path d="M 5 90 A 45 45 0 0 1 95 90" stroke="rgba(251, 191, 36, 1)" strokeWidth="2" fill="none" style={{ strokeDasharray: 282.7, strokeDashoffset: 282.7 * (1 - daylightPercentage / 100) }} />
+                {daylightPercentage > 0 && (
+                    <g transform={`translate(${x}, ${y})`}>
+                        <circle cx="0" cy="0" r="5" fill="#FBBF24" />
+                    </g>
+                )}
+            </svg>
+            <div className="absolute bottom-12 left-0 text-sm font-semibold">{new Date(sunrise).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
+            <div className="absolute bottom-12 right-0 text-sm font-semibold">{new Date(sunset).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
+            <p className="text-center mt-2 font-medium">
+                {now > new Date(sunset) ? "Sun has set" : (now < new Date(sunrise) ? "Sun will rise soon" : "Current Sun Position")}
+            </p>
+        </div>
+    );
+};
+
+
 const Home = () => {
     const [city, setCity] = useState('');
     const [weatherData, setWeatherData] = useState(null);
-    const [airQualityData, setAirQualityData] = useState(null); // নতুন state
+    const [airQualityData, setAirQualityData] = useState(null);
     const [locationInfo, setLocationInfo] = useState(null);
     const [selectedDayIndex, setSelectedDayIndex] = useState(0);
     const [loading, setLoading] = useState(true);
@@ -75,15 +145,10 @@ const Home = () => {
                 setLocationInfo({ city: locData.city || locData.principalSubdivision, country: locData.countryName });
             }
             
-            // --- API URL আপগ্রেড করা হয়েছে ---
-            const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,wind_speed_10m,surface_pressure,wind_direction_10m&hourly=temperature_2m,weather_code,precipitation_probability&daily=weather_code,temperature_2m_max,temperature_2m_min,sunrise,sunset,uv_index_max,precipitation_probability_mean&timezone=auto`;
+            const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,wind_speed_10m,surface_pressure,wind_direction_10m&hourly=temperature_2m,weather_code,precipitation_probability&daily=weather_code,temperature_2m_max,temperature_2m_min,sunrise,sunset,uv_index_max,precipitation_probability_mean,daylight_duration&timezone=auto`;
             const airQualityUrl = `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${latitude}&longitude=${longitude}&current=us_aqi,pm2_5,ozone`;
 
-            // --- সমান্তরালভাবে দুটি API কল করা হচ্ছে ---
-            const [weather, airQuality] = await Promise.all([
-                fetchAPI(weatherUrl),
-                fetchAPI(airQualityUrl)
-            ]);
+            const [weather, airQuality] = await Promise.all([ fetchAPI(weatherUrl), fetchAPI(airQualityUrl) ]);
 
             setWeatherData(weather);
             setAirQualityData(airQuality);
@@ -93,12 +158,16 @@ const Home = () => {
     };
 
     useEffect(() => {
-        const initialLoad = async () => {
-            try {
-                const data = await fetchAPI('https://ipinfo.io/json');
-                const [latitude, longitude] = data.loc.split(',');
-                await fetchWeather({ coords: { latitude, longitude } });
-            } catch (error) { await fetchWeather({ city: 'Dhaka' }); }
+        const initialLoad = () => {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const { latitude, longitude } = position.coords;
+                    fetchWeather({ coords: { latitude, longitude } });
+                },
+                () => {
+                    fetchWeather({ city: 'Dhaka' }); 
+                }
+            );
         };
         initialLoad();
     }, []);
@@ -106,12 +175,17 @@ const Home = () => {
     const handleSearch = () => city.trim() && fetchWeather({ city: city.trim() });
     const handleKeyPress = (e) => e.key === 'Enter' && handleSearch();
 
-    // -- ডেটা প্রসেসিং --
     const { displayedWeather, hourlyForecast, aqiInfo } = useMemo(() => {
         if (!weatherData) return { displayedWeather: null, hourlyForecast: [], aqiInfo: null };
 
         const { daily, current, hourly } = weatherData;
         const isToday = selectedDayIndex === 0;
+
+        const formatDuration = (seconds) => {
+            const h = Math.floor(seconds / 3600);
+            const m = Math.floor((seconds % 3600) / 60);
+            return `${h}h ${m}m`;
+        };
 
         const dpWeather = {
             date: daily.time[selectedDayIndex],
@@ -121,13 +195,14 @@ const Home = () => {
             maxTemp: Math.round(daily.temperature_2m_max[selectedDayIndex]),
             minTemp: Math.round(daily.temperature_2m_min[selectedDayIndex]),
             wind: isToday ? current.wind_speed_10m.toFixed(1) : null,
-            windDirection: isToday ? getWindDirection(current.wind_direction_10m) : null, // নতুন ডেটা
+            windDirection: isToday ? getWindDirection(current.wind_direction_10m) : null,
             humidity: isToday ? current.relative_humidity_2m : null,
-            pressure: isToday ? current.surface_pressure.toFixed(1) : null, // নতুন ডেটা
+            pressure: isToday ? current.surface_pressure.toFixed(1) : null,
             uv: daily.uv_index_max[selectedDayIndex].toFixed(1),
-            sunrise: new Date(daily.sunrise[selectedDayIndex]).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true }),
-            sunset: new Date(daily.sunset[selectedDayIndex]).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true }),
-            precipitation: daily.precipitation_probability_mean[selectedDayIndex] // নতুন ডেটা
+            sunrise: daily.sunrise[selectedDayIndex],
+            sunset: daily.sunset[selectedDayIndex],
+            precipitation: daily.precipitation_probability_mean[selectedDayIndex],
+            daylightDuration: formatDuration(daily.daylight_duration[selectedDayIndex]),
         };
 
         const now = new Date();
@@ -136,7 +211,7 @@ const Home = () => {
             time: new Date(time).toLocaleTimeString('en-US', { hour: 'numeric', hour12: true }),
             temp: Math.round(hourly.temperature_2m[currentHourIndex + i]),
             weatherCode: hourly.weather_code[currentHourIndex + i],
-            precipitation: hourly.precipitation_probability[currentHourIndex + i] // নতুন ডেটা
+            precipitation: hourly.precipitation_probability[currentHourIndex + i]
         }));
 
         const aqInfo = airQualityData ? {
@@ -150,12 +225,11 @@ const Home = () => {
     }, [weatherData, airQualityData, selectedDayIndex]);
 
     const weatherInfo = displayedWeather ? getWeatherInfo(displayedWeather.weatherCode) : null;
-
+    
     return (
         <div className="main-bg">
             <main className="min-h-screen w-full p-4 sm:p-6 lg:p-8">
                 <div className="max-w-6xl mx-auto">
-                    {/* -- Search Bar -- */}
                     <div className="flex w-full max-w-lg mx-auto mb-8 glass-card rounded-full">
                         <input type="text" value={city} onChange={(e) => setCity(e.target.value)} onKeyPress={handleKeyPress} placeholder="Search for a city..." className="w-full py-3 px-6 text-white bg-transparent rounded-l-full focus:outline-none placeholder-slate-300"/>
                         <button onClick={handleSearch} className="px-5 py-3 bg-white/20 text-white rounded-r-full hover:bg-white/30 transition"><svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg></button>
@@ -166,7 +240,6 @@ const Home = () => {
 
                     {weatherData && displayedWeather && locationInfo && weatherInfo && (
                         <div className="animate-fade-in space-y-8">
-                            {/* -- Main Weather Section -- */}
                             <div className="flex flex-col md:flex-row gap-8">
                                 <div className="w-full md:w-1/2 glass-card rounded-2xl p-6 flex flex-col items-center text-center">
                                     <h2 className="text-2xl sm:text-3xl font-bold">{locationInfo.city}, {locationInfo.country}</h2>
@@ -180,18 +253,16 @@ const Home = () => {
                                     </div>
                                     <p className="text-2xl capitalize font-light">{weatherInfo.d}</p>
                                 </div>
-                                <div className="hidden md:block w-full md:w-1/2 glass-card rounded-2xl p-6">
+                                <div className="w-full md:w-1/2 glass-card rounded-2xl p-6">
                                      <h3 className="text-2xl font-semibold mb-5 text-center">Today's Highlights</h3>
-                                     <div className="grid grid-cols-2 lg:grid-cols-3 gap-5 text-lg"> {/* আপডেটেড গ্রিড */}
+                                     <div className="grid grid-cols-2 lg:grid-cols-3 gap-5 text-lg">
                                         {[
                                             { label: 'UV Index', value: displayedWeather.uv, Icon: UvIcon },
                                             { label: 'Wind Speed', value: `${displayedWeather.wind} km/h`, Icon: WindIcon },
-                                            { label: 'Sunrise', value: displayedWeather.sunrise, Icon: () => <SunIcon isSunrise /> },
-                                            { label: 'Sunset', value: displayedWeather.sunset, Icon: () => <SunIcon isSunrise={false} /> },
                                             { label: 'Humidity', value: `${displayedWeather.humidity}%`, Icon: HumidityIcon },
                                             { label: 'Feels Like', value: `${displayedWeather.feelsLike}°`, Icon: FeelsLikeIcon },
-                                            { label: 'Pressure', value: `${displayedWeather.pressure} hPa`, Icon: PressureIcon }, // নতুন
-                                            { label: 'Wind Direction', value: displayedWeather.windDirection, Icon: WindDirectionIcon }, // নতুন
+                                            { label: 'Pressure', value: `${displayedWeather.pressure} hPa`, Icon: PressureIcon },
+                                            { label: 'Daylight', value: displayedWeather.daylightDuration, Icon: DaylightIcon },
                                         ].filter(item => item.value && !item.value.includes('null')).map(item => (
                                             <div key={item.label} className="text-center p-3 rounded-lg bg-white/10">
                                                 <p className="font-light text-slate-300 text-base flex items-center justify-center gap-2">{item.Icon()} {item.label}</p>
@@ -202,22 +273,12 @@ const Home = () => {
                                 </div>
                             </div>
                             
-                            <div className="block md:hidden glass-card rounded-2xl p-6">
-                                <h3 className="text-2xl font-semibold mb-5 text-center">Today's Highlights</h3>
-                                <div className="grid grid-cols-2 gap-5 text-lg">
-                                    {[
-                                        { label: 'Wind Speed', value: `${displayedWeather.wind} km/h`, Icon: WindIcon },
-                                        { label: 'Humidity', value: `${displayedWeather.humidity}%`, Icon: HumidityIcon },
-                                        { label: 'Sunrise', value: displayedWeather.sunrise, Icon: () => <SunIcon isSunrise /> },
-                                        { label: 'Sunset', value: displayedWeather.sunset, Icon: () => <SunIcon isSunrise={false} /> },
-                                    ].filter(item => item.value && !item.value.includes('null')).map(item => (
-                                        <div key={item.label} className="text-center p-2 rounded-lg bg-white/10">
-                                            <p className="font-light text-slate-300 text-sm flex items-center justify-center gap-2">{item.Icon()} {item.label}</p>
-                                            <p className="font-bold text-xl mt-1">{item.value}</p>
-                                        </div>
-                                    ))}
+                            {selectedDayIndex === 0 && (
+                                <div className="glass-card p-6 rounded-2xl">
+                                    <h3 className="text-2xl font-bold mb-4">Sunrise & Sunset</h3>
+                                    <SunPathComponent sunrise={displayedWeather.sunrise} sunset={displayedWeather.sunset} />
                                 </div>
-                            </div>
+                            )}
 
                             {selectedDayIndex === 0 && (
                                 <div className="glass-card p-6 rounded-2xl">
@@ -231,7 +292,7 @@ const Home = () => {
                                                         <p className="font-semibold">{hour.time}</p>
                                                         <div className="w-12 h-12 mx-auto my-1" dangerouslySetInnerHTML={{ __html: hourInfo.i }} />
                                                         <p className="font-bold text-xl">{hour.temp}°</p>
-                                                        <p className="text-sm text-slate-300 mt-1">💧 {hour.precipitation}%</p> {/* নতুন */}
+                                                        <p className="text-sm text-slate-300 mt-1">💧 {hour.precipitation}%</p>
                                                     </div>
                                                 );
                                             })}
@@ -252,7 +313,7 @@ const Home = () => {
                                                     <div className="w-12 h-12 mx-auto my-1" dangerouslySetInnerHTML={{ __html: dayInfo.i }} />
                                                     <p className="font-bold text-xl">{Math.round(weatherData.daily.temperature_2m_max[index])}°</p>
                                                     <p className="text-slate-300 text-sm">{Math.round(weatherData.daily.temperature_2m_min[index])}°</p>
-                                                    <p className="text-xs text-slate-300 mt-1">💧 {weatherData.daily.precipitation_probability_mean[index]}%</p> {/* নতুন */}
+                                                    <p className="text-xs text-slate-300 mt-1">💧 {weatherData.daily.precipitation_probability_mean[index]}%</p>
                                                 </div>
                                             );
                                         })}
@@ -260,13 +321,12 @@ const Home = () => {
                                 </div>
                             </div>
                             
-                            {/* --- নতুন ফিচার: Air Quality Card --- */}
                             {aqiInfo && selectedDayIndex === 0 && (
                                 <div className="glass-card p-6 rounded-2xl">
                                     <h3 className="text-2xl font-bold mb-4 flex items-center gap-2"><AirQualityIcon /> Air Quality Index</h3>
                                     <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
                                         <div className="text-center sm:text-left">
-                                            <p className={`text-3xl font-bold px-4 py-1 rounded-full ${aqiInfo.details.color}`}>{aqiInfo.details.level}</p>
+                                            <p className={`text-2xl font-bold px-4 py-1 rounded-full ${aqiInfo.details.color} text-white`}>{aqiInfo.details.level}</p>
                                             <p className="text-slate-300 mt-2">Current US AQI is {aqiInfo.value}.</p>
                                         </div>
                                         <div className="w-full sm:w-auto text-center sm:text-right">
@@ -286,3 +346,4 @@ const Home = () => {
 };
 
 export default Home;
+
