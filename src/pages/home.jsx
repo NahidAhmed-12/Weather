@@ -81,13 +81,14 @@ const Home = () => {
         styleElement.innerHTML = css;
         document.head.appendChild(styleElement);
 
+        // কম্পোনেন্ট আনমাউন্ট হলে স্টাইলটি সরিয়ে ফেলা হবে
         return () => {
             const style = document.getElementById('global-weather-styles');
             if (style) {
                 document.head.removeChild(style);
             }
         };
-    }, []);
+    }, []); // খালি dependency array মানে এটি শুধু একবারই রান হবে
 
     const fetchAPI = async (url) => {
         const response = await fetch(url);
@@ -132,7 +133,7 @@ const Home = () => {
             setLoading(false);
         }
     };
-    
+
     useEffect(() => {
         const initialLoad = async () => {
             try {
@@ -173,14 +174,14 @@ const Home = () => {
 
     return (
         <div className="main-container-wrapper">
-            <main className="min-h-screen w-full p-4 sm:p-6">
-                <div className="flex w-full max-w-xl mx-auto mb-6 glass-card rounded-full">
+            <main className="min-h-screen w-full p-4 sm:p-6 md:p-8">
+                <div className="flex w-full max-w-xl mx-auto mb-8 glass-card rounded-full">
                     <input
                         type="text" value={city} onChange={(e) => setCity(e.target.value)}
                         onKeyPress={handleKeyPress} placeholder="Search for a city..."
-                        className="w-full py-3 px-5 text-white bg-transparent rounded-l-full focus:outline-none placeholder-slate-300"
+                        className="w-full py-3 px-6 text-white bg-transparent rounded-l-full focus:outline-none placeholder-slate-300"
                     />
-                    <button onClick={handleSearch} className="px-4 py-3 bg-white/20 text-white rounded-r-full hover:bg-white/30 transition duration-300">
+                    <button onClick={handleSearch} className="px-5 py-3 bg-white/20 text-white rounded-r-full hover:bg-white/30 transition duration-300">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
                     </button>
                 </div>
@@ -190,24 +191,24 @@ const Home = () => {
 
                 {weatherData && displayedWeather && locationInfo && (
                     <div id="weather-content" className="max-w-6xl mx-auto animate-fade-in">
-                        <div className="flex flex-col lg:flex-row gap-6 mb-6">
-                            <div className="w-full lg:w-1/2 glass-card rounded-2xl p-4 md:p-6 flex flex-col items-center text-center">
-                                <h2 className="text-2xl sm:text-3xl font-bold tracking-wide">{locationInfo.city}, {locationInfo.country}</h2>
-                                <p className="text-base text-slate-300 mt-1">
-                                    {selectedDayIndex === 0 ? "Today" : new Date(displayedWeather.date).toLocaleString('en-US', { weekday: 'long', month: 'short', day: 'numeric' })}
+                        <div className="flex flex-col lg:flex-row gap-8 mb-8">
+                            <div className="w-full lg:w-1/2 glass-card rounded-2xl p-6 flex flex-col items-center md:items-start text-center md:text-left">
+                                <h2 className="text-3xl sm:text-4xl font-bold tracking-wide">{locationInfo.city}, {locationInfo.country}</h2>
+                                <p className="text-lg text-slate-300 mt-1">
+                                    {selectedDayIndex === 0 ? "Today" : new Date(displayedWeather.date).toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' })}
                                 </p>
-                                <div className="flex flex-col sm:flex-row items-center my-3 w-full justify-center">
-                                    <div className="w-28 h-28 sm:w-32 sm:h-32" dangerouslySetInnerHTML={{ __html: weatherInfo.i }} />
-                                    <div className="flex items-start ml-0 sm:ml-4 mt-2 sm:mt-0">
-                                        <p className="text-6xl sm:text-7xl font-bold relative">{displayedWeather.temp}</p>
-                                        <span className="text-2xl font-light mt-2">°C</span>
+                                <div className="flex flex-col sm:flex-row items-center my-4 w-full justify-center md:justify-start">
+                                    <div className="w-32 h-32" dangerouslySetInnerHTML={{ __html: weatherInfo.i }} />
+                                    <div className="flex items-start ml-0 sm:ml-4 mt-4 sm:mt-0">
+                                        <p className="text-7xl sm:text-8xl font-bold relative">{displayedWeather.temp}</p>
+                                        <span className="text-3xl font-light mt-2">°C</span>
                                     </div>
                                 </div>
-                                <p className="text-xl sm:text-2xl capitalize font-light">{weatherInfo.d}</p>
+                                <p className="text-2xl capitalize font-light">{weatherInfo.d}</p>
                             </div>
-                            <div className="w-full lg:w-1/2 glass-card rounded-2xl p-4 md:p-6">
-                                <h3 className="text-xl font-semibold mb-4 text-center">Details</h3>
-                                <div className="grid grid-cols-2 gap-x-4 gap-y-3 text-base">
+                            <div className="w-full lg:w-1/2 glass-card rounded-2xl p-6">
+                                <h3 className="text-2xl font-semibold mb-5 text-center">Details</h3>
+                                <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-4 gap-y-5 text-lg">
                                     {[
                                         { label: 'Max Temp', value: `${displayedWeather.maxTemp}°` },
                                         { label: 'Min Temp', value: `${displayedWeather.minTemp}°` },
@@ -217,15 +218,15 @@ const Home = () => {
                                         { label: 'UV Index', value: displayedWeather.uv },
                                     ].map(item => (
                                         <div key={item.label} className="text-center p-2 rounded-lg bg-white/10">
-                                            <p className="font-light text-slate-300 text-sm">{item.label}</p>
-                                            <p className="font-bold text-lg sm:text-xl">{item.value}</p>
+                                            <p className="font-light text-slate-300">{item.label}</p>
+                                            <p className="font-bold text-2xl">{item.value}</p>
                                         </div>
                                     ))}
                                 </div>
                             </div>
                         </div>
-                        <div className="glass-card p-4 md:p-6 rounded-2xl">
-                            <h3 className="text-xl font-bold mb-4">7-Day Forecast</h3>
+                        <div className="glass-card p-6 rounded-2xl">
+                            <h3 className="text-2xl font-bold mb-4">7-Day Forecast</h3>
                             <div className="overflow-x-auto pb-3 custom-scrollbar">
                                 <div className="flex space-x-4">
                                     {weatherData.daily.time.slice(0, 7).map((date, index) => {
@@ -234,13 +235,13 @@ const Home = () => {
                                         return (
                                             <div
                                                 key={date}
-                                                className={`p-3 rounded-xl cursor-pointer text-center w-24 flex-shrink-0 transition-all duration-300 border-2 ${isActive ? 'bg-white/30 border-white/50' : 'bg-white/10 border-transparent hover:bg-white/20'}`}
+                                                className={`p-4 rounded-xl cursor-pointer text-center w-28 flex-shrink-0 transition-all duration-300 border-2 ${isActive ? 'bg-white/30 border-white/50' : 'bg-white/10 border-transparent hover:bg-white/20'}`}
                                                 onClick={() => setSelectedDayIndex(index)}
                                             >
-                                                <p className="font-semibold text-base">{new Date(date).toLocaleString('en-US', { weekday: 'short' })}</p>
-                                                <div className="w-12 h-12 mx-auto my-1" dangerouslySetInnerHTML={{ __html: dayInfo.i }} />
-                                                <p className="font-bold text-lg">{Math.round(weatherData.daily.temperature_2m_max[index])}°</p>
-                                                <p className="text-slate-300 text-sm">{Math.round(weatherData.daily.temperature_2m_min[index])}°</p>
+                                                <p className="font-semibold text-lg">{new Date(date).toLocaleDateString('en-US', { weekday: 'short' })}</p>
+                                                <div className="w-12 h-12 mx-auto my-2" dangerouslySetInnerHTML={{ __html: dayInfo.i }} />
+                                                <p className="font-bold text-xl">{Math.round(weatherData.daily.temperature_2m_max[index])}°</p>
+                                                <p className="text-slate-300">{Math.round(weatherData.daily.temperature_2m_min[index])}°</p>
                                             </div>
                                         );
                                     })}
