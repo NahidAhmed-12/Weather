@@ -15,7 +15,18 @@ const ErrorMessage = ({ message }) => ( <div className="text-center text-yellow-
 
 // --- getWeatherInfo ফাংশন ---
 const getWeatherInfo = (code) => {
-    const weatherMap = { 0: { d: "Clear sky", i: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-full h-full text-yellow-300"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>` }, 1: { d: "Mainly clear", i: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-full h-full text-white"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"></path><path d="M22 10a3 3 0 0 0-3-3h-2.207a5.502 5.502 0 0 0-10.702.5"></path></svg>` }, 2: { d: "Partly cloudy", i: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-full h-full text-white"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"></path></svg>` }, 3: { d: "Overcast", i: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-full h-full text-gray-400"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"></path></svg>` }, 45: { d: "Fog", i: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-full h-full text-gray-400"><path d="M16 16.5A4.2 4.2 0 0 0 12 12a4.2 4.2 0 0 0-4 4.5"></path><path d="M2 12h2.25"></path><path d="M19.75 12H22"></path><path d="M4 16h16"></path><path d="M4 20h16"></path><path d="M12 8V4.5"></path></svg>` }, 51: { d: "Light drizzle", i: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-full h-full text-blue-300"><path d="M8 19v2"></path><path d="M8 13v2"></path><path d="M16 19v2"></path><path d="M16 13v2"></path><path d="M12 21v2"></path><path d="M12 15v2"></path><path d="M20 16.5A4.5 4.5 0 0 0 15.5 12H9a7 7 0 0 0-7 7"></path></svg>` }, 61: { d: "Light rain", i: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-full h-full text-blue-400"><path d="M8 19v2"></path><path d="M8 13v2"></path><path d="M16 19v2"></path><path d="M16 13v2"></path><path d="M12 21v2"></path><path d="M12 15v2"></path><path d="M20 16.5A4.5 4.5 0 0 0 15.5 12H9a7 7 0 0 0-7 7"></path></svg>` }, 80: { d: "Rain showers", i: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-full h-full text-blue-500"><path d="M20 16.5A4.5 4.5 0 0 0 15.5 12H9a7 7 0 0 0-7 7"></path><path d="m9 12-2-7h10l-2 7"></path><path d="m12 22 2-7"></path><path d="m8 22 2-7"></path><path d="m16 22 2-7"></path></svg>` }, 95: { d: "Thunderstorm", i: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-full h-full text-yellow-500"><path d="M21.74 18.25a2.12 2.12 0 0 0-2.92 0c-1.88 2.3-5.28 3.75-9.82 3.75-5.28 0-10-2.5-10-2.5.83 2.17 4.25 3.75 9 3.75 6.5 0 10-2.5 12-5 1.4-1.68 1.4-3.5 0-5Z"></path><path d="M16 12.5a4.2 4.2 0 0 0-4-4.5 4.2 4.2 0 0 0-4 4.5c0 2.21 1.79 4 4 4s4-1.79 4-4Z"></path><path d="m14.5 12.5-3 5.5"></path><path d="m9.5 12.5 3 5.5"></path><path d="m13 10-1.5-5.5"></path><path d="m8 10 1.5-5.5"></path></svg>` }, };
+    const weatherMap = { 
+        // পরিবর্তিত আইকন
+        0: { d: "Clear sky", i: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="currentColor" class="w-full h-full text-yellow-300"><path d="M12 1.25a.75.75 0 01.75.75v2.5a.75.75 0 01-1.5 0V2A.75.75 0 0112 1.25zM12 19.25a.75.75 0 01.75.75v2.5a.75.75 0 01-1.5 0v-2.5a.75.75 0 01.75-.75zM5.47 5.47a.75.75 0 011.06 0l1.77 1.77a.75.75 0 11-1.06 1.06L5.47 6.53a.75.75 0 010-1.06zM15.7 15.7a.75.75 0 011.06 0l1.77 1.77a.75.75 0 01-1.06 1.06l-1.77-1.77a.75.75 0 010-1.06zM1.25 12a.75.75 0 01.75-.75h2.5a.75.75 0 010 1.5h-2.5A.75.75 0 011.25 12zM19.25 12a.75.75 0 01.75-.75h2.5a.75.75 0 010 1.5h-2.5a.75.75 0 01-.75-.75zM5.47 18.53a.75.75 0 010-1.06l1.77-1.77a.75.75 0 011.06 1.06L6.53 18.53a.75.75 0 01-1.06 0zM15.7 8.3a.75.75 0 010-1.06l1.77-1.77a.75.75 0 011.06 1.06L16.76 8.3a.75.75 0 01-1.06 0z"></path><circle cx="12" cy="12" r="5" fill="currentColor"/></svg>` }, 
+        1: { d: "Mainly clear", i: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-full h-full text-white"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"></path><path d="M22 10a3 3 0 0 0-3-3h-2.207a5.502 5.502 0 0 0-10.702.5"></path></svg>` }, 
+        2: { d: "Partly cloudy", i: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-full h-full text-white"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"></path></svg>` }, 
+        3: { d: "Overcast", i: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-full h-full text-gray-400"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"></path></svg>` }, 
+        45: { d: "Fog", i: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-full h-full text-gray-400"><path d="M16 16.5A4.2 4.2 0 0 0 12 12a4.2 4.2 0 0 0-4 4.5"></path><path d="M2 12h2.25"></path><path d="M19.75 12H22"></path><path d="M4 16h16"></path><path d="M4 20h16"></path><path d="M12 8V4.5"></path></svg>` }, 
+        51: { d: "Light drizzle", i: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-full h-full text-blue-300"><path d="M8 19v2"></path><path d="M8 13v2"></path><path d="M16 19v2"></path><path d="M16 13v2"></path><path d="M12 21v2"></path><path d="M12 15v2"></path><path d="M20 16.5A4.5 4.5 0 0 0 15.5 12H9a7 7 0 0 0-7 7"></path></svg>` }, 
+        61: { d: "Light rain", i: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-full h-full text-blue-400"><path d="M8 19v2"></path><path d="M8 13v2"></path><path d="M16 19v2"></path><path d="M16 13v2"></path><path d="M12 21v2"></path><path d="M12 15v2"></path><path d="M20 16.5A4.5 4.5 0 0 0 15.5 12H9a7 7 0 0 0-7 7"></path></svg>` }, 
+        80: { d: "Rain showers", i: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-full h-full text-blue-500"><path d="M20 16.5A4.5 4.5 0 0 0 15.5 12H9a7 7 0 0 0-7 7"></path><path d="m9 12-2-7h10l-2 7"></path><path d="m12 22 2-7"></path><path d="m8 22 2-7"></path><path d="m16 22 2-7"></path></svg>` }, 
+        95: { d: "Thunderstorm", i: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-full h-full text-yellow-500"><path d="M21.74 18.25a2.12 2.12 0 0 0-2.92 0c-1.88 2.3-5.28 3.75-9.82 3.75-5.28 0-10-2.5-10-2.5.83 2.17 4.25 3.75 9 3.75 6.5 0 10-2.5 12-5 1.4-1.68 1.4-3.5 0-5Z"></path><path d="M16 12.5a4.2 4.2 0 0 0-4-4.5 4.2 4.2 0 0 0-4 4.5c0 2.21 1.79 4 4 4s4-1.79 4-4Z"></path><path d="m14.5 12.5-3 5.5"></path><path d="m9.5 12.5 3 5.5"></path><path d="m13 10-1.5-5.5"></path><path d="m8 10 1.5-5.5"></path></svg>` }, 
+    };
     const defaultWeather = { d: "Cloudy", i: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-full h-full text-white"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"></path></svg>` };
     const key = Object.keys(weatherMap).find(k => Number(k) >= code);
     return weatherMap[key] || defaultWeather;
@@ -30,7 +41,7 @@ const SunPathComponent = ({ sunrise, sunset }) => {
     const [now, setNow] = useState(new Date());
 
     useEffect(() => {
-        const timer = setInterval(() => setNow(new Date()), 60000);
+        const timer = setInterval(() => setNow(new Date()), 60000); // প্রতি মিনিটে আপডেট
         return () => clearInterval(timer);
     }, []);
 
@@ -50,8 +61,14 @@ const SunPathComponent = ({ sunrise, sunset }) => {
         return { sunPosition: percentage, daylightPercentage: percentage };
     }, [sunrise, sunset, now]);
 
+    const angle = (sunPosition / 100) * 180;
+    const x = 50 - 45 * Math.cos(angle * (Math.PI / 180));
+    const y = 90 - 45 * Math.sin(angle * (Math.PI / 180));
+
     return (
+        // কন্টেইনারটিকে ছোট করা হয়েছে (max-w-sm)
         <div className="relative w-full max-w-sm mx-auto text-center">
+            {/* SVG এর viewBox পরিবর্তন করা হয়েছে যাতে এটি কম জায়গা নেয় */}
             <svg viewBox="0 45 100 50" className="w-full h-auto overflow-visible">
                 {/* Background dashed path */}
                 <path d="M 5 90 A 45 45 0 0 1 95 90" stroke="rgba(255, 255, 255, 0.3)" strokeWidth="2" fill="none" strokeDasharray="4, 4" />
@@ -65,10 +82,18 @@ const SunPathComponent = ({ sunrise, sunset }) => {
                         }} />
                 }
                 
-                {/* হলুদ আইকনটি এখান থেকে সরিয়ে দেওয়া হয়েছে */}
-
+                {/* পরিবর্তিত সূর্যের আইকন */}
+                {daylightPercentage > 0 && (
+                     <g transform={`translate(${x - 10}, ${y - 10})`}>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="#FBBF24" stroke="none">
+                            <circle cx="12" cy="12" r="5"/>
+                            <path d="M12 1v2a1 1 0 0 1-2 0V1a1 1 0 0 1 2 0Zm0 20v2a1 1 0 0 1-2 0v-2a1 1 0 0 1 2 0ZM4.22 4.22l1.42 1.42a1 1 0 0 1-1.42 1.42L2.8 5.64a1 1 0 0 1 1.42-1.42Zm14.14 14.14 1.42 1.42a1 1 0 0 1-1.42 1.42l-1.42-1.42a1 1 0 0 1 1.42-1.42ZM1 12h2a1 1 0 0 1 0 2H1a1 1 0 0 1 0-2Zm20 0h2a1 1 0 0 1 0 2h-2a1 1 0 0 1 0-2ZM4.22 19.78l1.42-1.42a1 1 0 0 1 1.42 1.42l-1.42 1.42a1 1 0 0 1-1.42-1.42Zm14.14-14.14-1.42 1.42a1 1 0 0 1-1.42-1.42l1.42-1.42a1 1 0 0 1 1.42 1.42Z"/>
+                        </svg>
+                    </g>
+                )}
             </svg>
             
+            {/* Sunrise এবং Sunset এর সময় SVG এর বাইরে আনা হয়েছে */}
             <div className="flex justify-between font-semibold text-sm -mt-4 px-1">
                 <div className="text-left">
                     <p className="text-slate-300 text-xs sm:text-sm">Sunrise</p>
@@ -81,11 +106,12 @@ const SunPathComponent = ({ sunrise, sunset }) => {
             </div>
 
             <p className="mt-4 font-medium text-sm">
-                {now > new Date(sunset) ? "Sun has set" : (now < new Date(sunrise) ? "Sun will rise soon" : "Daylight Progress")}
+                {now > new Date(sunset) ? "Sun has set" : (now < new Date(sunrise) ? "Sun will rise soon" : "Current Sun Position")}
             </p>
         </div>
     );
 };
+
 
 const Home = () => {
     const [city, setCity] = useState('');
