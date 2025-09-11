@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 // এই লাইনটি আপনার getWeatherInfo ফাংশশনের সঠিক পাথ অনুযায়ী পরিবর্তন করুন
 import { getWeatherInfo } from '../assets/icons';
 
-// --- আইকন কম্পোনেন্টগুলো ---
+// --- ছোট আইকন কম্পোনেন্টগুলো কোডকে আরও পরিচ্ছন্ন রাখে ---
 const UvIcon = () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-6 h-6 inline-block"><path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M12 12a5 5 0 100-10 5 5 0 000 10z"></path></svg>;
 const WindIcon = () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-6 h-6 inline-block"><path d="M9.59 4.59A2 2 0 1111 8H2m10.59 11.41A2 2 0 1014 16H2m15.73-8.27A2.5 2.5 0 1119.5 12H2"></path></svg>;
 const SunIcon = ({ isSunrise }) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-6 h-6 inline-block"><path d={isSunrise ? "M17 18a5 5 0 00-10 0" : "M17 16a5 5 0 00-10 0"}></path><line x1="12" y1="9" x2="12" y2="2"></line><line x1="4.22" y1="10.22" x2="5.64" y2="8.81"></line><line x1="1" y1="18" x2="3" y2="18"></line><line x1="21" y1="18" x2="23" y2="18"></line><line x1="18.36" y1="8.81" x2="19.78" y2="10.22"></line><line x1="12" y1="22" x2="12" y2="18"></line></svg>;
@@ -19,8 +19,6 @@ const Home = () => {
     const [selectedDayIndex, setSelectedDayIndex] = useState(0);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    // --- নতুন ফিচার: তাপমাত্রা ইউনিটের জন্য স্টেট ---
-    const [unit, setUnit] = useState('celsius'); // 'celsius' or 'fahrenheit'
 
     useEffect(() => {
         const css = `
@@ -58,6 +56,7 @@ const Home = () => {
                 setLocationInfo({ city: locData.city || locData.principalSubdivision, country: locData.countryName });
             }
             
+            // API URL আপগ্রেড করা হয়েছে hourly এবং অন্যান্য ডেটার জন্য
             const weather = await fetchAPI(`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,wind_speed_10m&hourly=temperature_2m,weather_code&daily=weather_code,temperature_2m_max,temperature_2m_min,sunrise,sunset,uv_index_max&timezone=auto`);
             setWeatherData(weather); setSelectedDayIndex(0);
         } catch (err) { setError(err.message); } 
@@ -78,28 +77,20 @@ const Home = () => {
     const handleSearch = () => city.trim() && fetchWeather({ city: city.trim() });
     const handleKeyPress = (e) => e.key === 'Enter' && handleSearch();
 
-    // --- নতুন ফিচার: ইউনিট পরিবর্তনের জন্য ফাংশন ---
-    const handleUnitToggle = () => {
-        setUnit(prevUnit => prevUnit === 'celsius' ? 'fahrenheit' : 'celsius');
-    };
-
-    // -- ডেটা প্রসেসিং এবং তাপমাত্রা রূপান্তর --
+    // -- ডেটা প্রসেসিং --
     const { displayedWeather, hourlyForecast } = useMemo(() => {
         if (!weatherData) return { displayedWeather: null, hourlyForecast: [] };
-
-        const cToF = (c) => Math.round(c * 9 / 5 + 32);
-        const convertTemp = (c) => (unit === 'celsius' ? Math.round(c) : cToF(c));
 
         const { daily, current, hourly } = weatherData;
         const isToday = selectedDayIndex === 0;
 
         const dpWeather = {
             date: daily.time[selectedDayIndex],
-            temp: convertTemp(isToday ? current.temperature_2m : daily.temperature_2m_max[selectedDayIndex]),
-            feelsLike: isToday ? convertTemp(current.apparent_temperature) : null,
+            temp: isToday ? Math.round(current.temperature_2m) : Math.round(daily.temperature_2m_max[selectedDayIndex]),
+            feelsLike: isToday ? Math.round(current.apparent_temperature) : null,
             weatherCode: daily.weather_code[selectedDayIndex],
-            maxTemp: convertTemp(daily.temperature_2m_max[selectedDayIndex]),
-            minTemp: convertTemp(daily.temperature_2m_min[selectedDayIndex]),
+            maxTemp: Math.round(daily.temperature_2m_max[selectedDayIndex]),
+            minTemp: Math.round(daily.temperature_2m_min[selectedDayIndex]),
             wind: isToday ? current.wind_speed_10m.toFixed(1) : null,
             humidity: isToday ? current.relative_humidity_2m : null,
             uv: daily.uv_index_max[selectedDayIndex].toFixed(1),
@@ -111,12 +102,12 @@ const Home = () => {
         const currentHourIndex = hourly.time.findIndex(timeStr => new Date(timeStr) >= now);
         const hForecast = hourly.time.slice(currentHourIndex, currentHourIndex + 24).map((time, i) => ({
             time: new Date(time).toLocaleTimeString('en-US', { hour: 'numeric', hour12: true }),
-            temp: convertTemp(hourly.temperature_2m[currentHourIndex + i]),
+            temp: Math.round(hourly.temperature_2m[currentHourIndex + i]),
             weatherCode: hourly.weather_code[currentHourIndex + i],
         }));
 
         return { displayedWeather: dpWeather, hourlyForecast: hForecast };
-    }, [weatherData, selectedDayIndex, unit]); // unit-কে dependency array-তে যোগ করা হয়েছে
+    }, [weatherData, selectedDayIndex]);
 
     const weatherInfo = displayedWeather ? getWeatherInfo(displayedWeather.weatherCode) : null;
 
@@ -124,16 +115,10 @@ const Home = () => {
         <div className="main-bg">
             <main className="min-h-screen w-full p-4 sm:p-6 lg:p-8">
                 <div className="max-w-6xl mx-auto">
-                    {/* -- Search Bar & Unit Toggle Button -- */}
-                    <div className="flex justify-center items-center gap-4 mb-8">
-                        <div className="flex w-full max-w-lg glass-card rounded-full">
-                            <input type="text" value={city} onChange={(e) => setCity(e.target.value)} onKeyPress={handleKeyPress} placeholder="Search for a city..." className="w-full py-3 px-6 text-white bg-transparent rounded-l-full focus:outline-none placeholder-slate-300"/>
-                            <button onClick={handleSearch} className="px-5 py-3 bg-white/20 text-white rounded-r-full hover:bg-white/30 transition"><svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg></button>
-                        </div>
-                        {/* --- নতুন ফিচার: ইউনিট পরিবর্তনের বাটন --- */}
-                        <button onClick={handleUnitToggle} className="glass-card rounded-full px-4 py-3 font-bold text-lg hover:bg-white/20 transition">
-                            °{unit === 'celsius' ? 'F' : 'C'}
-                        </button>
+                    {/* -- Search Bar -- */}
+                    <div className="flex w-full max-w-lg mx-auto mb-8 glass-card rounded-full">
+                        <input type="text" value={city} onChange={(e) => setCity(e.target.value)} onKeyPress={handleKeyPress} placeholder="Search for a city..." className="w-full py-3 px-6 text-white bg-transparent rounded-l-full focus:outline-none placeholder-slate-300"/>
+                        <button onClick={handleSearch} className="px-5 py-3 bg-white/20 text-white rounded-r-full hover:bg-white/30 transition"><svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg></button>
                     </div>
 
                     {loading && <Loader />}
@@ -149,27 +134,52 @@ const Home = () => {
                                     <div className="flex items-center my-4">
                                         <div className="w-28 h-28" dangerouslySetInnerHTML={{ __html: weatherInfo.i }} />
                                         <div className="ml-2">
-                                            <p className="text-7xl font-bold">{displayedWeather.temp}°<span className="text-4xl align-top">{unit === 'celsius' ? 'C' : 'F'}</span></p>
+                                            <p className="text-7xl font-bold">{displayedWeather.temp}°<span className="text-4xl align-top">C</span></p>
                                             {selectedDayIndex === 0 && <p className="text-sm text-slate-300 -mt-2">Feels like {displayedWeather.feelsLike}°</p>}
                                         </div>
                                     </div>
                                     <p className="text-2xl capitalize font-light">{weatherInfo.d}</p>
                                 </div>
                                 <div className="hidden md:block w-full md:w-1/2 glass-card rounded-2xl p-6">
+                                     {/* --- নতুন ফিচার: Today's Highlights (ডেস্কটপ) --- */}
                                     <h3 className="text-2xl font-semibold mb-5 text-center">Today's Highlights</h3>
                                     <div className="grid grid-cols-2 gap-5 text-lg">
-                                        {[ { label: 'Sunrise', value: displayedWeather.sunrise, Icon: () => <SunIcon isSunrise /> }, { label: 'Sunset', value: displayedWeather.sunset, Icon: () => <SunIcon isSunrise={false} /> }, { label: 'Wind Speed', value: `${displayedWeather.wind} km/h`, Icon: WindIcon }, { label: 'Humidity', value: `${displayedWeather.humidity}%`, Icon: HumidityIcon }, { label: 'UV Index', value: displayedWeather.uv, Icon: UvIcon }, { label: 'Feels Like', value: `${displayedWeather.feelsLike}°`, Icon: FeelsLikeIcon }, ].filter(item => !String(item.value).includes('null')).map(item => ( <div key={item.label} className="text-center p-3 rounded-lg bg-white/10"><p className="font-light text-slate-300 text-base flex items-center justify-center gap-2">{item.Icon()} {item.label}</p><p className="font-bold text-2xl mt-1">{item.value}</p></div> ))}
+                                        {[
+                                            { label: 'Sunrise', value: displayedWeather.sunrise, Icon: () => <SunIcon isSunrise /> },
+                                            { label: 'Sunset', value: displayedWeather.sunset, Icon: () => <SunIcon isSunrise={false} /> },
+                                            { label: 'Wind Speed', value: `${displayedWeather.wind} km/h`, Icon: WindIcon },
+                                            { label: 'Humidity', value: `${displayedWeather.humidity}%`, Icon: HumidityIcon },
+                                            { label: 'UV Index', value: displayedWeather.uv, Icon: UvIcon },
+                                            { label: 'Feels Like', value: `${displayedWeather.feelsLike}°`, Icon: FeelsLikeIcon },
+                                        ].filter(item => item.value.includes('null') === false).map(item => (
+                                            <div key={item.label} className="text-center p-3 rounded-lg bg-white/10">
+                                                <p className="font-light text-slate-300 text-base flex items-center justify-center gap-2">{item.Icon()} {item.label}</p>
+                                                <p className="font-bold text-2xl mt-1">{item.value}</p>
+                                            </div>
+                                        ))}
                                     </div>
                                 </div>
                             </div>
                             
+                            {/* --- নতুন ফিচার: Today's Highlights (মোবাইল) --- */}
                             <div className="block md:hidden glass-card rounded-2xl p-6">
                                 <h3 className="text-2xl font-semibold mb-5 text-center">Today's Highlights</h3>
                                 <div className="grid grid-cols-2 gap-5 text-lg">
-                                    {[ { label: 'Sunrise', value: displayedWeather.sunrise, Icon: () => <SunIcon isSunrise /> }, { label: 'Sunset', value: displayedWeather.sunset, Icon: () => <SunIcon isSunrise={false} /> }, { label: 'Wind Speed', value: `${displayedWeather.wind} km/h`, Icon: WindIcon }, { label: 'Humidity', value: `${displayedWeather.humidity}%`, Icon: HumidityIcon }, ].filter(item => !String(item.value).includes('null')).map(item => ( <div key={item.label} className="text-center p-2 rounded-lg bg-white/10"><p className="font-light text-slate-300 text-sm flex items-center justify-center gap-2">{item.Icon()} {item.label}</p><p className="font-bold text-xl mt-1">{item.value}</p></div> ))}
+                                    {[
+                                        { label: 'Sunrise', value: displayedWeather.sunrise, Icon: () => <SunIcon isSunrise /> },
+                                        { label: 'Sunset', value: displayedWeather.sunset, Icon: () => <SunIcon isSunrise={false} /> },
+                                        { label: 'Wind Speed', value: `${displayedWeather.wind} km/h`, Icon: WindIcon },
+                                        { label: 'Humidity', value: `${displayedWeather.humidity}%`, Icon: HumidityIcon },
+                                    ].filter(item => item.value.includes('null') === false).map(item => (
+                                        <div key={item.label} className="text-center p-2 rounded-lg bg-white/10">
+                                            <p className="font-light text-slate-300 text-sm flex items-center justify-center gap-2">{item.Icon()} {item.label}</p>
+                                            <p className="font-bold text-xl mt-1">{item.value}</p>
+                                        </div>
+                                    ))}
                                 </div>
                             </div>
 
+                            {/* --- নতুন ফিচার: Hourly Forecast --- */}
                             {selectedDayIndex === 0 && (
                                 <div className="glass-card p-6 rounded-2xl">
                                     <h3 className="text-2xl font-bold mb-4">Hourly Forecast</h3>
@@ -177,22 +187,34 @@ const Home = () => {
                                         <div className="flex space-x-4 pb-2">
                                             {hourlyForecast.map((hour, index) => {
                                                 const hourInfo = getWeatherInfo(hour.weatherCode);
-                                                return ( <div key={index} className="p-4 rounded-xl text-center w-24 flex-shrink-0 bg-white/10"><p className="font-semibold">{hour.time}</p><div className="w-12 h-12 mx-auto my-2" dangerouslySetInnerHTML={{ __html: hourInfo.i }} /><p className="font-bold text-xl">{hour.temp}°</p></div> );
+                                                return (
+                                                    <div key={index} className="p-4 rounded-xl text-center w-24 flex-shrink-0 bg-white/10">
+                                                        <p className="font-semibold">{hour.time}</p>
+                                                        <div className="w-12 h-12 mx-auto my-2" dangerouslySetInnerHTML={{ __html: hourInfo.i }} />
+                                                        <p className="font-bold text-xl">{hour.temp}°</p>
+                                                    </div>
+                                                );
                                             })}
                                         </div>
                                     </div>
                                 </div>
                             )}
 
+                            {/* -- 7-Day Forecast -- */}
                             <div className="glass-card p-6 rounded-2xl">
                                 <h3 className="text-2xl font-bold mb-4">7-Day Forecast</h3>
                                 <div className="overflow-x-auto custom-scrollbar">
                                     <div className="flex space-x-4 pb-2">
                                         {weatherData.daily.time.slice(0, 7).map((date, index) => {
                                             const dayInfo = getWeatherInfo(weatherData.daily.weather_code[index]);
-                                            const maxTemp = convertTemp(weatherData.daily.temperature_2m_max[index]);
-                                            const minTemp = convertTemp(weatherData.daily.temperature_2m_min[index]);
-                                            return ( <div key={date} onClick={() => setSelectedDayIndex(index)} className={`p-4 rounded-xl cursor-pointer text-center w-28 flex-shrink-0 transition-all border-2 ${selectedDayIndex === index ? 'bg-white/30 border-white/50' : 'bg-white/10 border-transparent hover:bg-white/20'}`}><p className="font-semibold">{new Date(date).toLocaleDateString('en-US', { weekday: 'short' })}</p><div className="w-12 h-12 mx-auto my-2" dangerouslySetInnerHTML={{ __html: dayInfo.i }} /><p className="font-bold text-xl">{maxTemp}°</p><p className="text-slate-300">{minTemp}°</p></div> );
+                                            return (
+                                                <div key={date} onClick={() => setSelectedDayIndex(index)} className={`p-4 rounded-xl cursor-pointer text-center w-28 flex-shrink-0 transition-all border-2 ${selectedDayIndex === index ? 'bg-white/30 border-white/50' : 'bg-white/10 border-transparent hover:bg-white/20'}`}>
+                                                    <p className="font-semibold">{new Date(date).toLocaleDateString('en-US', { weekday: 'short' })}</p>
+                                                    <div className="w-12 h-12 mx-auto my-2" dangerouslySetInnerHTML={{ __html: dayInfo.i }} />
+                                                    <p className="font-bold text-xl">{Math.round(weatherData.daily.temperature_2m_max[index])}°</p>
+                                                    <p className="text-slate-300">{Math.round(weatherData.daily.temperature_2m_min[index])}°</p>
+                                                </div>
+                                            );
                                         })}
                                     </div>
                                 </div>
