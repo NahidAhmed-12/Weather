@@ -30,7 +30,7 @@ const SunPathComponent = ({ sunrise, sunset }) => {
     const [now, setNow] = useState(new Date());
 
     useEffect(() => {
-        const timer = setInterval(() => setNow(new Date()), 60000); // প্রতি মিনিটে আপডেট
+        const timer = setInterval(() => setNow(new Date()), 60000);
         return () => clearInterval(timer);
     }, []);
 
@@ -50,14 +50,8 @@ const SunPathComponent = ({ sunrise, sunset }) => {
         return { sunPosition: percentage, daylightPercentage: percentage };
     }, [sunrise, sunset, now]);
 
-    const angle = (sunPosition / 100) * 180;
-    const x = 50 - 45 * Math.cos(angle * (Math.PI / 180));
-    const y = 90 - 45 * Math.sin(angle * (Math.PI / 180));
-
     return (
-        // কন্টেইনারটিকে ছোট করা হয়েছে (max-w-sm)
         <div className="relative w-full max-w-sm mx-auto text-center">
-            {/* SVG এর viewBox পরিবর্তন করা হয়েছে যাতে এটি কম জায়গা নেয় */}
             <svg viewBox="0 45 100 50" className="w-full h-auto overflow-visible">
                 {/* Background dashed path */}
                 <path d="M 5 90 A 45 45 0 0 1 95 90" stroke="rgba(255, 255, 255, 0.3)" strokeWidth="2" fill="none" strokeDasharray="4, 4" />
@@ -71,16 +65,10 @@ const SunPathComponent = ({ sunrise, sunset }) => {
                         }} />
                 }
                 
-                {/* Sun icon - শুধুমাত্র দিনের আলো থাকলে দেখাবে */}
-                {daylightPercentage > 0 && (
-                    <g transform={`translate(${x}, ${y})`}>
-                        <circle cx="0" cy="0" r="5" fill="#FBBF24" />
-                        <circle cx="0" cy="0" r="8" fill="#FBBF24" fillOpacity="0.3" />
-                    </g>
-                )}
+                {/* হলুদ আইকনটি এখান থেকে সরিয়ে দেওয়া হয়েছে */}
+
             </svg>
             
-            {/* Sunrise এবং Sunset এর সময় SVG এর বাইরে আনা হয়েছে */}
             <div className="flex justify-between font-semibold text-sm -mt-4 px-1">
                 <div className="text-left">
                     <p className="text-slate-300 text-xs sm:text-sm">Sunrise</p>
@@ -93,7 +81,7 @@ const SunPathComponent = ({ sunrise, sunset }) => {
             </div>
 
             <p className="mt-4 font-medium text-sm">
-                {now > new Date(sunset) ? "Sun has set" : (now < new Date(sunrise) ? "Sun will rise soon" : "Current Sun Position")}
+                {now > new Date(sunset) ? "Sun has set" : (now < new Date(sunrise) ? "Sun will rise soon" : "Daylight Progress")}
             </p>
         </div>
     );
