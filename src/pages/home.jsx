@@ -15,10 +15,10 @@ const ErrorMessage = ({ message }) => ( <div className="text-center text-yellow-
 
 // --- getWeatherInfo ফাংশন ---
 const getWeatherInfo = (code) => {
-const weatherMap = { 0: { d: "Clear sky", i: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-full h-full text-yellow-300"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg> }, 1: { d: "Mainly clear", i: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-full h-full text-white"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"></path><path d="M22 10a3 3 0 0 0-3-3h-2.207a5.502 5.502 0 0 0-10.702.5"></path></svg> }, 2: { d: "Partly cloudy", i: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-full h-full text-white"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"></path></svg> }, 3: { d: "Overcast", i: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-full h-full text-gray-400"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"></path></svg> }, 45: { d: "Fog", i: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-full h-full text-gray-400"><path d="M16 16.5A4.2 4.2 0 0 0 12 12a4.2 4.2 0 0 0-4 4.5"></path><path d="M2 12h2.25"></path><path d="M19.75 12H22"></path><path d="M4 16h16"></path><path d="M4 20h16"></path><path d="M12 8V4.5"></path></svg> }, 51: { d: "Light drizzle", i: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-full h-full text-blue-300"><path d="M8 19v2"></path><path d="M8 13v2"></path><path d="M16 19v2"></path><path d="M16 13v2"></path><path d="M12 21v2"></path><path d="M12 15v2"></path><path d="M20 16.5A4.5 4.5 0 0 0 15.5 12H9a7 7 0 0 0-7 7"></path></svg> }, 61: { d: "Light rain", i: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-full h-full text-blue-400"><path d="M8 19v2"></path><path d="M8 13v2"></path><path d="M16 19v2"></path><path d="M16 13v2"></path><path d="M12 21v2"></path><path d="M12 15v2"></path><path d="M20 16.5A4.5 4.5 0 0 0 15.5 12H9a7 7 0 0 0-7 7"></path></svg> }, 80: { d: "Rain showers", i: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-full h-full text-blue-500"><path d="M20 16.5A4.5 4.5 0 0 0 15.5 12H9a7 7 0 0 0-7 7"></path><path d="m9 12-2-7h10l-2 7"></path><path d="m12 22 2-7"></path><path d="m8 22 2-7"></path><path d="m16 22 2-7"></path></svg> }, 
+const weatherMap = { 0: { d: "Clear sky", i: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-full h-full text-yellow-300"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg> }, 1: { d: "Mainly clear", i: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-full h-full text-white"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"></path><path d="M22 10a3 3 0 0 0-3-3h-2.207a5.502 5.502 0 0 0-10.702.5"></path></svg> }, 2: { d: "Partly cloudy", i: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-full h-full text-white"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"></path></svg> }, 3: { d: "Overcast", i: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-full h-full text-gray-400"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"></path></svg> }, 45: { d: "Fog", i: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-full h-full text-gray-400"><path d="M16 16.5A4.2 4.2 0 0 0 12 12a4.2 4.2 0 0 0-4 4.5"></path><path d="M2 12h2.25"></path><path d="M19.75 12H22"></path><path d="M4 16h16"></path><path d="M4 20h16"></path><path d="M12 8V4.5"></path></svg> }, 51: { d: "Light drizzle", i: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-full h-full text-blue-300"><path d="M8 19v2"></path><path d="M8 13v2"></path><path d="M16 19v2"></path><path d="M16 13v2"></path><path d="M12 21v2"></path><path d="M12 15v2"></path><path d="M20 16.5A4.5 4.5 0 0 0 15.5 12H9a7 7 0 0 0-7 7"></path></svg> }, 61: { d: "Light rain", i: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-full h-full text-blue-400"><path d="M8 19v2"></path><path d="M8 13v2"></path><path d="M16 19v2"></path><path d="M16 13v2"></path><path d="M12 21v2"></path><path d="M12 15v2"></path><path d="M20 16.5A4.5 4.5 0 0 0 15.5 12H9a7 7 0 0 0-7 7"></path></svg> }, 80: { d: "Rain showers", i: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-full h-full text-blue-500"><path d="M20 16.5A4.5 4.5 0 0 0 15.5 12H9a7 7 0 0 0-7 7"></path><path d="m9 12-2-7h10l-2 7"></path><path d="m12 22 2-7"></path><path d="m8 22 2-7"></path><path d="m16 22 2-7"></path></svg> }, 
 // --- পরিবর্তিত আইকন ---
-95: { d: "Thunderstorm", i: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-full h-full text-yellow-500"><path d="M21 16.9231V12.5C21 8.35786 17.6421 5 13.5 5C9.69139 5 6.63484 7.82471 6.13453 11.5H6C3.79086 11.5 2 13.2909 2 15.5C2 17.7091 3.79086 19.5 6 19.5H12"/><path d="M13 15L11 19L15 19L13 23"/></svg> }, };
-const defaultWeather = { d: "Cloudy", i: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-full h-full text-white"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"></path></svg> };
+95: { d: "Thunderstorm", i: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-full h-full text-yellow-500"><path d="M21 16.9231V12.5C21 8.35786 17.6421 5 13.5 5C9.69139 5 6.63484 7.82471 6.13453 11.5H6C3.79086 11.5 2 13.2909 2 15.5C2 17.7091 3.79086 19.5 6 19.5H12"/><path d="M13 15L11 19L15 19L13 23"/></svg> }, };
+const defaultWeather = { d: "Cloudy", i: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-full h-full text-white"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"></path></svg> };
 const key = Object.keys(weatherMap).find(k => Number(k) >= code);
 return weatherMap[key] || defaultWeather;
 };
@@ -58,15 +58,10 @@ const x = 50 - 45 * Math.cos(angle * (Math.PI / 180));
 const y = 90 - 45 * Math.sin(angle * (Math.PI / 180));
 
 return (
-// কন্টেইনারটিকে ছোট করা হয়েছে (max-w-sm)
 <div className="relative w-full max-w-sm mx-auto text-center">
-{/* SVG এর viewBox পরিবর্তন করা হয়েছে যাতে এটি কম জায়গা নেয় */}
 <svg viewBox="0 45 100 50" className="w-full h-auto overflow-visible">
-{/* Background dashed path */}
 <path d="M 5 90 A 45 45 0 0 1 95 90" stroke="rgba(255, 255, 255, 0.3)" strokeWidth="2" fill="none" strokeDasharray="4, 4" />
 
-
-{/* Progress path - শুধুমাত্র দিনের আলো থাকলে দেখাবে */}
 {daylightPercentage > 0 &&
 <path d="M 5 90 A 45 45 0 0 1 95 90" stroke="rgba(251, 191, 36, 1)" strokeWidth="2" fill="none"
 style={{
@@ -75,7 +70,6 @@ strokeDashoffset: 141.4 * (1 - sunPosition / 100)
 }} />
 }
 
-{/* Sun icon - শুধুমাত্র দিনের আলো থাকলে দেখাবে */}
     {daylightPercentage > 0 && (
         <g transform={`translate(${x}, ${y})`}>
             <circle cx="0" cy="0" r="5" fill="#FBBF24" />
@@ -84,7 +78,6 @@ strokeDashoffset: 141.4 * (1 - sunPosition / 100)
     )}
 </svg>
 
-{/* Sunrise এবং Sunset এর সময় SVG এর বাইরে আনা হয়েছে */}
 <div className="flex justify-between font-semibold text-sm -mt-4 px-1">
     <div className="text-left">
         <p className="text-slate-300 text-xs sm:text-sm">Sunrise</p>
@@ -244,7 +237,8 @@ return (
                         <h2 className="text-2xl sm:text-3xl font-bold">{locationInfo.city}, {locationInfo.country}</h2>
                         <p className="text-base text-slate-300">{new Date(displayedWeather.date).toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' })}</p>
                         <div className="flex items-center my-4">
-                            <div className="w-28 h-28" dangerouslySetInnerHTML={{ __html: String(weatherInfo.i) }} />
+                            {/* --- সংশোধন করা হয়েছে --- */}
+                            <div className="w-28 h-28">{weatherInfo.i}</div>
                             <div className="ml-2">
                                 <p className="text-7xl font-bold">{displayedWeather.temp}°<span className="text-4xl align-top">C</span></p>
                                 {selectedDayIndex === 0 && <p className="text-sm text-slate-300 -mt-2">Feels like {displayedWeather.feelsLike}°</p>}
@@ -282,7 +276,8 @@ return (
                                     return (
                                         <div key={index} className="p-4 rounded-xl text-center w-28 flex-shrink-0 bg-white/10">
                                             <p className="font-semibold">{hour.time}</p>
-                                            <div className="w-12 h-12 mx-auto my-1" dangerouslySetInnerHTML={{ __html: String(hourInfo.i) }} />
+                                            {/* --- সংশোধন করা হয়েছে --- */}
+                                            <div className="w-12 h-12 mx-auto my-1">{hourInfo.i}</div>
                                             <p className="font-bold text-xl">{hour.temp}°</p>
                                             <p className="text-sm text-slate-300 mt-1">💧 {hour.precipitation}%</p>
                                         </div>
@@ -302,7 +297,8 @@ return (
                                 return (
                                     <div key={date} onClick={() => setSelectedDayIndex(index)} className={`p-4 rounded-xl cursor-pointer text-center w-32 flex-shrink-0 transition-all border-2 ${selectedDayIndex === index ? 'bg-white/30 border-white/50' : 'bg-white/10 border-transparent hover:bg-white/20'}`}>
                                         <p className="font-semibold">{new Date(date).toLocaleDateString('en-US', { weekday: 'short' })}</p>
-                                        <div className="w-12 h-12 mx-auto my-1" dangerouslySetInnerHTML={{ __html: String(dayInfo.i) }} />
+                                        {/* --- সংশোধন করা হয়েছে --- */}
+                                        <div className="w-12 h-12 mx-auto my-1">{dayInfo.i}</div>
                                         <p className="font-bold text-xl">{Math.round(weatherData.daily.temperature_2m_max[index])}°</p>
                                         <p className="text-slate-300 text-sm">{Math.round(weatherData.daily.temperature_2m_min[index])}°</p>
                                         <p className="text-xs text-slate-300 mt-1">💧 {weatherData.daily.precipitation_probability_mean[index]}%</p>
