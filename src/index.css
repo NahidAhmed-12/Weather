@@ -6,13 +6,7 @@
 
 body {
     background: linear-gradient(135deg, #1a2a3a, #2a4a5a, #3a6a7a);
-    font-family: 'Poppins', sans-serif;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-    padding: 1rem;
-    color: white; /* ডিফল্ট টেক্সট কালার */
+}
 }
 
 .main-container {
