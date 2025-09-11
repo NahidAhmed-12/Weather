@@ -9,6 +9,21 @@ const PressureIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="24" he
 const DaylightIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6 inline-block"><path d="M12 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10z"></path><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path></svg>;
 const AirQualityIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6 inline-block"><path d="M12.5 18H5.22a2 2 0 0 1-1.79-1.11L2 12l1.43-4.89a2 2 0 0 1 1.79-1.11h13.14a2 2 0 0 1 1.79 1.11L22 12l-1.43 4.89a2 2 0 0 1-1.79 1.11H17"></path><path d="M12.5 18a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z"></path><path d="M17 18a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z"></path></svg>;
 
+// --- নতুন Sun এবং Moon আইকন ---
+const SunIcon = () => (
+    <g>
+        <circle cx="0" cy="0" r="6" fill="#FBBF24" />
+        <circle cx="0" cy="0" r="9" fill="#FBBF24" fillOpacity="0.3" />
+    </g>
+);
+const MoonIcon = () => (
+    <g>
+         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E2E8F0" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+    </g>
+);
+
 // --- Helper Components ---
 const Loader = () => ( <div className="text-center my-8"><svg className="animate-spin h-10 w-10 text-white mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg><p className="mt-2 text-slate-300">Loading data...</p></div> );
 const ErrorMessage = ({ message }) => ( <div className="text-center text-yellow-300 glass-card p-4 rounded-lg mt-4 max-w-xl mx-auto"><p>Error: {message}</p></div> );
@@ -29,72 +44,73 @@ const getWindDirection = (degrees) => { const directions = ['N', 'NNE', 'NE', 'E
 
 // --- নতুন এবং উন্নত SunPath কম্পোনেন্ট ---
 const SunPathComponent = ({ sunrise, sunset }) => {
-const [now, setNow] = useState(new Date());
+    const [now, setNow] = useState(new Date());
 
-useEffect(() => {
-const timer = setInterval(() => setNow(new Date()), 60000); // প্রতি মিনিটে আপডেট
-return () => clearInterval(timer);
-}, []);
+    useEffect(() => {
+        const timer = setInterval(() => setNow(new Date()), 60000); // প্রতি মিনিটে আপডেট
+        return () => clearInterval(timer);
+    }, []);
 
-const { sunPosition, daylightPercentage } = useMemo(() => {
-const sunriseTime = new Date(sunrise).getTime();
-const sunsetTime = new Date(sunset).getTime();
-const nowTime = now.getTime();
+    const { sunPosition, daylightPercentage, isDay } = useMemo(() => {
+        const sunriseTime = new Date(sunrise).getTime();
+        const sunsetTime = new Date(sunset).getTime();
+        const nowTime = now.getTime();
 
-if (nowTime < sunriseTime || nowTime > sunsetTime) {
-return { sunPosition: nowTime < sunriseTime ? 0 : 100, daylightPercentage: 0 };
-}
+        const isCurrentlyDay = nowTime >= sunriseTime && nowTime <= sunsetTime;
 
-const totalDaylight = sunsetTime - sunriseTime;
-const elapsed = nowTime - sunriseTime;
-const percentage = (elapsed / totalDaylight) * 100;
+        if (!isCurrentlyDay) {
+            return { sunPosition: nowTime < sunriseTime ? 0 : 100, daylightPercentage: 0, isDay: false };
+        }
 
-return { sunPosition: percentage, daylightPercentage: percentage };
+        const totalDaylight = sunsetTime - sunriseTime;
+        const elapsed = nowTime - sunriseTime;
+        const percentage = (elapsed / totalDaylight) * 100;
 
-}, [sunrise, sunset, now]);
+        return { sunPosition: percentage, daylightPercentage: percentage, isDay: true };
 
-const angle = (sunPosition / 100) * 180;
-const x = 50 - 45 * Math.cos(angle * (Math.PI / 180));
-const y = 90 - 45 * Math.sin(angle * (Math.PI / 180));
+    }, [sunrise, sunset, now]);
 
-return (
-<div className="relative w-full max-w-sm mx-auto text-center">
-<svg viewBox="0 45 100 50" className="w-full h-auto overflow-visible">
-<path d="M 5 90 A 45 45 0 0 1 95 90" stroke="rgba(255, 255, 255, 0.3)" strokeWidth="2" fill="none" strokeDasharray="4, 4" />
+    const angle = (sunPosition / 100) * 180;
+    const x = 50 - 45 * Math.cos(angle * (Math.PI / 180));
+    const y = 90 - 45 * Math.sin(angle * (Math.PI / 180));
 
-{daylightPercentage > 0 &&
-<path d="M 5 90 A 45 45 0 0 1 95 90" stroke="rgba(251, 191, 36, 1)" strokeWidth="2" fill="none"
-style={{
-strokeDasharray: 141.4,
-strokeDashoffset: 141.4 * (1 - sunPosition / 100)
-}} />
-}
+    return (
+        <div className="relative w-full max-w-sm mx-auto text-center">
+            <svg viewBox="0 45 100 50" className="w-full h-auto overflow-visible">
+                <path d="M 5 90 A 45 45 0 0 1 95 90" stroke="rgba(255, 255, 255, 0.3)" strokeWidth="2" fill="none" strokeDasharray="4, 4" />
 
-    {daylightPercentage > 0 && (
-        <g transform={`translate(${x}, ${y})`}>
-            <circle cx="0" cy="0" r="5" fill="#FBBF24" />
-            <circle cx="0" cy="0" r="8" fill="#FBBF24" fillOpacity="0.3" />
-        </g>
-    )}
-</svg>
+                {daylightPercentage > 0 &&
+                    <path d="M 5 90 A 45 45 0 0 1 95 90" stroke="rgba(251, 191, 36, 1)" strokeWidth="2" fill="none"
+                        style={{
+                            strokeDasharray: 141.4,
+                            strokeDashoffset: 141.4 * (1 - sunPosition / 100)
+                        }} />
+                }
+                
+                <g transform={`translate(${x}, ${y})`}>
+                    {isDay ? <SunIcon /> : <MoonIcon />}
+                </g>
 
-<div className="flex justify-between font-semibold text-sm -mt-4 px-1">
-    <div className="text-left">
-        <p className="text-slate-300 text-xs sm:text-sm">Sunrise</p>
-        <p>{new Date(sunrise).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
-    </div>
-    <div className="text-right">
-        <p className="text-slate-300 text-xs sm:text-sm">Sunset</p>
-        <p>{new Date(sunset).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
-    </div>
-</div>
+            </svg>
 
-<p className="mt-4 font-medium text-sm">
-    {now > new Date(sunset) ? "Sun has set" : (now < new Date(sunrise) ? "Sun will rise soon" : "Current Sun Position")}
-</p>
-</div>
-);
+            <div className="flex justify-between font-semibold text-sm -mt-4 px-1">
+                <div className="text-left">
+                    <p className="text-slate-300 text-xs sm:text-sm">Sunrise</p>
+                    <p>{new Date(sunrise).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
+                </div>
+                <div className="text-right">
+                    <p className="text-slate-300 text-xs sm:text-sm">Sunset</p>
+                    <p>{new Date(sunset).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
+                </div>
+            </div>
+
+            <p className="mt-4 font-medium text-sm">
+                {now > new Date(sunset) ? "Sun has set" : (now < new Date(sunrise) ? "Sun will rise soon" : "Current Sun Position")}
+            </p>
+        </div>
+    );
 };
+
 
 const Home = () => {
 const [city, setCity] = useState('');
@@ -258,13 +274,6 @@ return (
                         </div>
                     </div>
                 </div>
-                
-                {selectedDayIndex === 0 && (
-                    <div className="glass-card p-6 rounded-2xl">
-                        <h3 className="text-2xl font-bold mb-4">Sunrise & Sunset</h3>
-                        <SunPathComponent sunrise={displayedWeather.sunrise} sunset={displayedWeather.sunset} />
-                    </div>
-                )}
 
                 {selectedDayIndex === 0 && (
                     <div className="glass-card p-6 rounded-2xl">
@@ -308,6 +317,14 @@ return (
                         </div>
                     </div>
                 </div>
+
+                {/* --- Sunrise & Sunset এর স্থান পরিবর্তন করা হয়েছে --- */}
+                {selectedDayIndex === 0 && (
+                    <div className="glass-card p-6 rounded-2xl">
+                        <h3 className="text-2xl font-bold mb-4">Sunrise & Sunset</h3>
+                        <SunPathComponent sunrise={displayedWeather.sunrise} sunset={displayedWeather.sunset} />
+                    </div>
+                )}
                 
                 {aqiInfo && selectedDayIndex === 0 && (
                     <div className="glass-card p-6 rounded-2xl">
