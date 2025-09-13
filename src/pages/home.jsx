@@ -147,46 +147,46 @@ useEffect(() => {
     const randomImage = backgroundImages[Math.floor(Math.random() * backgroundImages.length)];
 
     const css = `
-        body { 
-            color: #ffffff; 
-            font-family: 'Inter', sans-serif; 
-        } 
-        .main-bg::before { 
-            content: ''; 
-            position: fixed; 
-            top: 0; 
-            left: 0; 
-            width: 100%; 
-            height: 100vh; 
-            background-image: url('${randomImage}'); 
-            background-size: cover; 
-            background-position: center; 
-            z-index: -1; 
-            filter: brightness(0.6); 
+        body {
+            color: #ffffff;
+            font-family: 'Inter', sans-serif;
+        }
+        .main-bg::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background-image: url('${randomImage}');
+            background-size: cover;
+            background-position: center;
+            z-index: -1;
+            filter: brightness(0.6);
             transition: background-image 0.5s ease-in-out;
-        } 
-        @keyframes fadeIn { 
-            from { opacity: 0; transform: translateY(15px); } 
-            to { opacity: 1; transform: translateY(0); } 
-        } 
-        .animate-fade-in { 
-            animation: fadeIn 0.6s ease-out forwards; 
-        } 
-        .glass-card { 
-            background: rgba(0, 0, 0, 0.2); 
-            backdrop-filter: blur(12px); 
-            border: 1px solid rgba(255, 255, 255, 0.1); 
-        } 
-        .custom-scrollbar::-webkit-scrollbar { 
-            height: 6px; 
-        } 
-        .custom-scrollbar::-webkit-scrollbar-track { 
-            background: rgba(255, 255, 255, 0.1); 
-            border-radius: 10px; 
-        } 
-        .custom-scrollbar::-webkit-scrollbar-thumb { 
-            background: rgba(255, 255, 255, 0.3); 
-            border-radius: 10px; 
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+        .glass-card {
+            background: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
         }
     `;
     const styleElement = document.createElement('style');
@@ -208,37 +208,40 @@ return response.json();
 };
 
 const fetchWeather = async ({ city = null, coords = null }) => {
-setLoading(true); setError(null); setWeatherData(null); setAirQualityData(null);
-try {
-let latitude, longitude;
+    setLoading(true); setError(null); setWeatherData(null); setAirQualityData(null);
+    try {
+        let latitude, longitude;
 
-if (coords) {
-    latitude = coords.latitude;
-    longitude = coords.longitude;
-    const locData = await fetchAPI(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}&localityLanguage=en`);
-    setLocationInfo({ city: locData.city || locData.principalSubdivision, country: locData.countryName });
-} else if (city) {
-    const geoData = await fetchAPI(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(city)}&count=1`);
-    if (!geoData.results?.length) throw new Error('City not found.');
-    const { latitude: lat, longitude: lon, name, country } = geoData.results[0];
-    latitude = lat; longitude = lon; setLocationInfo({ city: name, country });
-}
+        if (coords) {
+            latitude = coords.latitude;
+            longitude = coords.longitude;
+            const locData = await fetchAPI(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}&localityLanguage=en`);
+            const shortCountryName = locData.countryName.split(',')[0]; // দেশের নাম সংক্ষিপ্ত করা হয়েছে
+            setLocationInfo({ city: locData.city || locData.principalSubdivision, country: shortCountryName });
+        } else if (city) {
+            const geoData = await fetchAPI(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(city)}&count=1`);
+            if (!geoData.results?.length) throw new Error('City not found.');
+            const { latitude: lat, longitude: lon, name, country } = geoData.results[0];
+            latitude = lat; longitude = lon;
+            const shortCountryName = country.split(',')[0]; // দেশের নাম সংক্ষিপ্ত করা হয়েছে
+            setLocationInfo({ city: name, country: shortCountryName });
+        }
 
-if(!latitude || !longitude) throw new Error('Could not determine location.');
+        if(!latitude || !longitude) throw new Error('Could not determine location.');
 
-const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,wind_speed_10m,surface_pressure,wind_direction_10m&hourly=temperature_2m,weather_code,precipitation_probability&daily=weather_code,temperature_2m_max,temperature_2m_min,sunrise,sunset,uv_index_max,precipitation_probability_mean,daylight_duration&timezone=auto`;
-const airQualityUrl = `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${latitude}&longitude=${longitude}&current=us_aqi,pm2_5,ozone`;
+        const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,wind_speed_10m,surface_pressure,wind_direction_10m&hourly=temperature_2m,weather_code,precipitation_probability&daily=weather_code,temperature_2m_max,temperature_2m_min,sunrise,sunset,uv_index_max,precipitation_probability_mean,daylight_duration&timezone=auto`;
+        const airQualityUrl = `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${latitude}&longitude=${longitude}&current=us_aqi,pm2_5,ozone`;
 
-const [weather, airQuality] = await Promise.all([ fetchAPI(weatherUrl), fetchAPI(airQualityUrl) ]);
+        const [weather, airQuality] = await Promise.all([ fetchAPI(weatherUrl), fetchAPI(airQualityUrl) ]);
 
-setWeatherData(weather);
-setAirQualityData(airQuality);
-setSelectedDayIndex(0);
+        setWeatherData(weather);
+        setAirQualityData(airQuality);
+        setSelectedDayIndex(0);
 
-} catch (err) { setError(err.message); }
-finally { setLoading(false); }
-
+    } catch (err) { setError(err.message); }
+    finally { setLoading(false); }
 };
+
 
 useEffect(() => {
     const initialLoad = async () => {
