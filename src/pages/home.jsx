@@ -3,7 +3,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 // --- আইকন কম্পোনেন্টগুলো ---
 const UvIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6 inline-block"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path></svg>;
 const WindIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6 inline-block"><path d="M17.7 7.7a2.5 2.5 0 1 1 1.8 4.3H2"></path><path d="M9.6 4.6A2 2 0 1 1 11 8H2"></path><path d="M12.6 19.4A2 2 0 1 0 14 16H2"></path></svg>;
-const HumidityIcon = () => <svg xmlns="http://www.w.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6 inline-block"><path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"></path></svg>;
+const HumidityIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6 inline-block"><path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"></path></svg>;
 const FeelsLikeIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6 inline-block"><path d="M14 4v10.54a4 4 0 1 1-4 0V4a2 2 0 0 1 4 0z"></path></svg>;
 const PressureIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6 inline-block"><path d="m12 14 4-4"></path><path d="M3.34 19a10 10 0 1 1 17.32 0"></path></svg>;
 const DaylightIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6 inline-block"><path d="M12 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10z"></path><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path></svg>;
@@ -30,7 +30,7 @@ const ErrorMessage = ({ message }) => ( <div className="text-center text-yellow-
 
 // --- getWeatherInfo ফাংশন ---
 const getWeatherInfo = (code) => {
-const weatherMap = { 0: { d: "Clear sky", i: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-full h-full text-yellow-300"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg> }, 1: { d: "Mainly clear", i: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-full h-full text-white"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"></path><path d="M22 10a3 3 0 0 0-3-3h-2.207a5.502 5.502 0 0 0-10.702.5"></path></svg> }, 2: { d: "Partly cloudy", i: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-full h-full text-white"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"></path></svg> }, 3: { d: "Overcast", i: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-full h-full text-gray-400"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"></path></svg> }, 45: { d: "Fog", i: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-full h-full text-gray-400"><path d="M16 16.5A4.2 4.2 0 0 0 12 12a4.2 4.2 0 0 0-4 4.5"></path><path d="M2 12h2.25"></path><path d="M19.75 12H22"></path><path d="M4 16h16"></path><path d="M4 20h16"></path><path d="M12 8V4.5"></path></svg> }, 51: { d: "Light drizzle", i: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-full h-full text-blue-300"><path d="M8 19v2"></path><path d="M8 13v2"></path><path d="M16 19v2"></path><path d="M16 13v2"></path><path d="M12 21v2"></path><path d="M12 15v2"></path><path d="M20 16.5A4.5 4.5 0 0 0 15.5 12H9a7 7 0 0 0-7 7"></path></svg> }, 61: { d: "Light rain", i: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-full h-full text-blue-400"><path d="M8 19v2"></path><path d="M8 13v2"></path><path d="M16 19v2"></path><path d="M16 13v2"></path><path d="M12 21v2"></path><path d="M12 15v2"></path><path d="M20 16.5A4.5 4.5 0 0 0 15.5 12H9a7 7 0 0 0-7 7"></path></svg> }, 80: { d: "Rain showers", i: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-full h-full text-blue-500"><path d="M20 16.5A4.5 4.5 0 0 0 15.5 12H9a7 7 0 0 0-7 7"></path><path d="m9 12-2-7h10l-2 7"></path><path d="m12 22 2-7"></path><path d="m8 22 2-7"></path><path d="m16 22 2-7"></path></svg> }, 
+const weatherMap = { 0: { d: "Clear sky", i: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-full h-full text-yellow-300"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg> }, 1: { d: "Mainly clear", i: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-full h-full text-white"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"></path><path d="M22 10a3 3 0 0 0-3-3h-2.207a5.502 5.502 0 0 0-10.702.5"></path></svg> }, 2: { d: "Partly cloudy", i: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-full h-full text-white"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"></path></svg> }, 3: { d: "Overcast", i: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-full h-full text-gray-400"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"></path></svg> }, 45: { d: "Fog", i: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-full h-full text-gray-400"><path d="M16 16.5A4.2 4.2 0 0 0 12 12a4.2 4.2 0 0 0-4 4.5"></path><path d="M2 12h2.25"></path><path d="M19.75 12H22"></path><path d="M4 16h16"></path><path d="M4 20h16"></path><path d="M12 8V4.5"></path></svg> }, 51: { d: "Light drizzle", i: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-full h-full text-blue-300"><path d="M8 19v2"></path><path d="M8 13v2"></path><path d="M16 19v2"></path><path d="M16 13v2"></path><path d="M12 21v2"></path><path d="M12 15v2"></path><path d="M20 16.5A4.5 4.5 0 0 0 15.5 12H9a7 7 0 0 0-7 7"></path></svg> }, 61: { d: "Light rain", i: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-full h-full text-blue-400"><path d="M8 19v2"></path><path d="M8 13v2"></path><path d="M16 19v2"></path><path d="M16 13v2"></path><path d="M12 21v2"></path><path d="M12 15v2"></path><path d="M20 16.5A4.5 4.5 0 0 0 15.5 12H9a7 7 0 0 0-7 7"></path></svg> }, 80: { d: "Rain showers", i: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-full h-full text-blue-500"><path d="M20 16.5A4.5 4.5 0 0 0 15.5 12H9a7 7 0 0 0-7 7"></path><path d="m9 12-2-7h10l-2 7"></path><path d="m12 22 2-7"></path><path d="m8 22 2-7"></path><path d="m16 22 2-7"></path></svg> },
 95: { d: "Thunderstorm", i: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-full h-full text-yellow-500"><path d="M21 16.9231V12.5C21 8.35786 17.6421 5 13.5 5C9.69139 5 6.63484 7.82471 6.13453 11.5H6C3.79086 11.5 2 13.2909 2 15.5C2 17.7091 3.79086 19.5 6 19.5H12"/><path d="M13 15L11 19L15 19L13 23"/></svg> }, };
 const defaultWeather = { d: "Cloudy", i: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-full h-full text-white"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"></path></svg> };
 const key = Object.keys(weatherMap).find(k => Number(k) >= code);
@@ -73,7 +73,7 @@ const SunPathComponent = ({ sunrise, sunset }) => {
             } else { // সূর্যাস্তের পরের রাত
                 elapsedNight = nowTime - sunsetTime;
             }
-            
+
             const nightPercentage = Math.min(100, (elapsedNight / (totalNight * 0.5)) * 100);
             return { position: nightPercentage, isDay: false };
         }
@@ -89,18 +89,18 @@ const SunPathComponent = ({ sunrise, sunset }) => {
             <svg viewBox="0 45 100 50" className="w-full h-auto overflow-visible">
                 {/* Path for day and night */}
                 <path d="M 5 90 A 45 45 0 0 1 95 90" stroke="rgba(255, 255, 255, 0.3)" strokeWidth="2" fill="none" strokeDasharray="4, 4" />
-                
+
                 {/* Filled path based on sun/moon position */}
-                <path d="M 5 90 A 45 45 0 0 1 95 90" 
-                    stroke={isDay ? "rgba(251, 191, 36, 1)" : "rgba(226, 232, 240, 0.8)"} 
-                    strokeWidth="2" 
+                <path d="M 5 90 A 45 45 0 0 1 95 90"
+                    stroke={isDay ? "rgba(251, 191, 36, 1)" : "rgba(226, 232, 240, 0.8)"}
+                    strokeWidth="2"
                     fill="none"
                     style={{
                         strokeDasharray: 141.4,
                         strokeDashoffset: 141.4 * (1 - position / 100)
-                    }} 
+                    }}
                 />
-                
+
                 <g transform={`translate(${x}, ${y})`}>
                     {isDay ? <SunIcon /> : <MoonIcon />}
                 </g>
@@ -135,13 +135,71 @@ const [selectedDayIndex, setSelectedDayIndex] = useState(0);
 const [loading, setLoading] = useState(true);
 const [error, setError] = useState(null);
 
+// --- র‍্যান্ডম ব্যাকগ্রাউন্ড ইমেজের জন্য কোড ---
 useEffect(() => {
-const css = `body { color: #ffffff; font-family: 'Inter', sans-serif; } .main-bg::before { content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background-image: url('https://images.pexels.com/photos/9536498/pexels-photo-9536498.jpeg'); background-size: cover; background-position: center; z-index: -1; filter: brightness(0.6); } @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } } .animate-fade-in { animation: fadeIn 0.6s ease-out forwards; } .glass-card { background: rgba(0, 0, 0, 0.2); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); } .custom-scrollbar::-webkit-scrollbar { height: 6px; } .custom-scrollbar::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.1); border-radius: 10px; } .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.3); border-radius: 10px; }`;
-const styleElement = document.createElement('style');
-styleElement.innerHTML = css;
-document.head.appendChild(styleElement);
-return () => document.head.removeChild(styleElement);
+    const backgroundImages = [
+        'https://images.pexels.com/photos/325117/pexels-photo-325117.jpeg',
+        'https://images.pexels.com/photos/31712156/pexels-photo-31712156.jpeg',
+        'https://images.pexels.com/photos/9536498/pexels-photo-9536498.jpeg',
+        'https://images.pexels.com/photos/33635184/pexels-photo-33635184.jpeg'
+    ];
+
+    const randomImage = backgroundImages[Math.floor(Math.random() * backgroundImages.length)];
+
+    const css = `
+        body { 
+            color: #ffffff; 
+            font-family: 'Inter', sans-serif; 
+        } 
+        .main-bg::before { 
+            content: ''; 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100vh; 
+            background-image: url('${randomImage}'); 
+            background-size: cover; 
+            background-position: center; 
+            z-index: -1; 
+            filter: brightness(0.6); 
+            transition: background-image 0.5s ease-in-out;
+        } 
+        @keyframes fadeIn { 
+            from { opacity: 0; transform: translateY(15px); } 
+            to { opacity: 1; transform: translateY(0); } 
+        } 
+        .animate-fade-in { 
+            animation: fadeIn 0.6s ease-out forwards; 
+        } 
+        .glass-card { 
+            background: rgba(0, 0, 0, 0.2); 
+            backdrop-filter: blur(12px); 
+            border: 1px solid rgba(255, 255, 255, 0.1); 
+        } 
+        .custom-scrollbar::-webkit-scrollbar { 
+            height: 6px; 
+        } 
+        .custom-scrollbar::-webkit-scrollbar-track { 
+            background: rgba(255, 255, 255, 0.1); 
+            border-radius: 10px; 
+        } 
+        .custom-scrollbar::-webkit-scrollbar-thumb { 
+            background: rgba(255, 255, 255, 0.3); 
+            border-radius: 10px; 
+        }
+    `;
+    const styleElement = document.createElement('style');
+    styleElement.innerHTML = css;
+    document.head.appendChild(styleElement);
+
+    return () => {
+        if(document.head.contains(styleElement)){
+            document.head.removeChild(styleElement);
+        }
+    };
 }, []);
+
 
 const fetchAPI = async (url) => {
 const response = await fetch(url);
@@ -155,7 +213,7 @@ try {
 let latitude, longitude;
 
 if (coords) {
-    latitude = coords.latitude; 
+    latitude = coords.latitude;
     longitude = coords.longitude;
     const locData = await fetchAPI(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}&localityLanguage=en`);
     setLocationInfo({ city: locData.city || locData.principalSubdivision, country: locData.countryName });
@@ -345,7 +403,7 @@ return (
                         <SunPathComponent sunrise={displayedWeather.sunrise} sunset={displayedWeather.sunset} />
                     </div>
                 )}
-                
+
                 {aqiInfo && selectedDayIndex === 0 && (
                     <div className="glass-card p-6 rounded-2xl">
                         <h3 className="text-2xl font-bold mb-4 flex items-center gap-2"><AirQualityIcon /> Air Quality Index</h3>
