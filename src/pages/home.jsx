@@ -18,7 +18,6 @@ const Home = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    // --- Background & Styles ---
     useEffect(() => {
         const backgroundImages = [
             '/Weather-img/img-1.avif',
@@ -92,7 +91,7 @@ const Home = () => {
     const fetchWeather = async ({ city = null }) => {
         setLoading(true); setError(null); setWeatherData(null); setAirQualityData(null);
         try {
-            // শুধুমাত্র সিটির নাম দিয়ে ল্যাটিচিউড/লঙ্গিচিউড এবং দেশের নাম বের করা
+           
             const geoData = await fetchAPI(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(city)}&count=1`);
             
             if (!geoData.results?.length) throw new Error('City not found.');
@@ -115,21 +114,21 @@ const Home = () => {
         finally { setLoading(false); }
     };
 
-    // --- INITIAL LOAD (SYSTEM DETECTED LOCATION) ---
+
     useEffect(() => {
         try {
-            // 1. ব্রাউজারের টাইমজোন ডিটেক্ট করা (যেমন: "Asia/Dhaka" বা "America/New_York")
+        
             const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
             
             if (userTimezone && userTimezone.includes('/')) {
-                // 2. টাইমজোন স্ট্রিং থেকে শহরের নাম বের করা (যেমন: "Dhaka" বা "New York")
+                
                 const detectedCity = userTimezone.split('/')[1].replace(/_/g, ' ');
                 console.log("Detected User Location via Timezone:", detectedCity);
                 
-                // 3. সেই শহরের ওয়েদার কল করা
+               
                 fetchWeather({ city: detectedCity });
             } else {
-                // যদি কোনো কারণে টাইমজোন না পাওয়া যায়, তবে ডিফল্ট ঢাকা
+              
                 fetchWeather({ city: 'Dhaka' });
             }
         } catch (error) {
