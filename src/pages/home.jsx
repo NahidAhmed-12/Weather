@@ -21,10 +21,10 @@ const Home = () => {
     // --- Background & Styles ---
     useEffect(() => {
         const backgroundImages = [
-            'https://images.pexels.com/photos/325117/pexels-photo-325117.jpeg',
-            'https://images.pexels.com/photos/31712156/pexels-photo-31712156.jpeg',
-            'https://images.pexels.com/photos/9536498/pexels-photo-9536498.jpeg',
-            'https://images.pexels.com/photos/33635184/pexels-photo-33635184.jpeg'
+            '/Weather-img/img-1.avif',
+            '/Weather-img/img-2.avif',
+            '/Weather-img/img-3.avif',
+            '/Weather-img/img-4.avif'
         ];
 
         const randomImage = backgroundImages[Math.floor(Math.random() * backgroundImages.length)];
