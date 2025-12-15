@@ -69,7 +69,7 @@ Make sure you have **Node.js** installed.
 
 **1. Clone the repository**
 ```bash
-git clone https://github.com/NahidAhmed-12/portfolio.git
+https://github.com/NahidAhmed-12/Weather.git
 ```
 
 **2. Navigate to project directory**
@@ -101,7 +101,7 @@ The application will open automatically at `http://localhost:3000`.
 src/
 ├── assets/             # Images (screenshot.avif, Nahid.avif)
 ├── pages/              # All Components & Pages
-│   ├── Hero.jsx        # Main Hero section with 3D animation
+│   ├── Home.jsx        # Main Hero section with 3D animation
 │   ├── Navbar.jsx      # Responsive Navigation
 │   ├── Footer.jsx      # Footer section
 │   └── ...             # Other page components
