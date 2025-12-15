@@ -2,7 +2,7 @@
   <h1 style="margin-top: 10px;">SkyCast | Advanced Weather App</h1>
 </div>
 
-![Project Screenshot](./public/screenshot.avif)
+![Project Screenshot](./public/weathers.avif)
 
 <div align="center">
 
@@ -11,7 +11,7 @@
   [![Open-Meteo](https://img.shields.io/badge/Open--Meteo-orange?style=for-the-badge&logo=sun&logoColor=white)](https://open-meteo.com/)
   [![Vercel](https://img.shields.io/badge/Vercel-%23000000.svg?style=for-the-badge&logo=vercel&logoColor=white)](https://nahid-weather-app.vercel.app/)
 
-  <h3>🚀 <a href="https://your-live-link.vercel.app/">View Live Website</a></h3>
+  <h3>🚀 <a href="https://weathers-10.vercel.app/">View Live Website</a></h3>
 </div>
 
 ---
